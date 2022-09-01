@@ -33,7 +33,7 @@ class Multicast:
                 f"Multicasting local IP {my_ip}:5000 for devices to connect via socket.io")
 
     @classmethod
-    async def cast(cls, verbose):
+    async def cast(cls, scan, verbose):
         retries = 0
         self = cls()
         self.verbose = verbose
