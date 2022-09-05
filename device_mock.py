@@ -3,7 +3,7 @@ import struct
 import asyncio
 from json import loads
 import socketio
-from enum import Enum
+import sys
 
 
 ##############################################################################
@@ -13,7 +13,7 @@ from enum import Enum
 ##############################################################################
 MCAST_GRP = '224.1.1.1'
 MCAST_PORT = 5007
-IS_ALL_GROUPS = True
+IS_ALL_GROUPS = False
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 if IS_ALL_GROUPS:
@@ -41,7 +41,7 @@ async def multicastListener():
 
                 if not sioSocket.connected:
                     await sioSocket.connect(conn)
-                await sioSocket.emit('my_message', {'mac': '1:2:3:4:5:6'})
+                await sioSocket.emit('my_message', {'mac': sys.argv[1]})
                 # await sioSocket.wait()
 
             except:
