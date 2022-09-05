@@ -40,7 +40,7 @@ async def multicastListener():
                 print(f'[SOCKET] Connecting to: {conn}')
 
                 await sio.connect(conn)
-                await sio.emit('sub.symbol', {'symbol': 'VDS_USDT'})
+                await sio.emit('my_message', {'symbol': 'VDS_USDT'})
                 await sio.wait()
             except:
                 print('could not conect')

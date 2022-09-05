@@ -13,17 +13,17 @@ app = socketio.WSGIApp(sio)
 
 @sio.event
 def connect(sid, environ):
-    print('[SOCKET] connect ', sid)
+    print('[SOCKET] Connect ', sid)
 
 
 @sio.event
 def my_message(sid, data):
-    print('[SOCKET] message ', data)
+    print('[SOCKET] Message ', data)
 
 
 @sio.event
 def disconnect(sid):
-    print('[SOCKET] disconnect ', sid)
+    print('[SOCKET] Disconnect ', sid)
 
 
 class WebServer():
