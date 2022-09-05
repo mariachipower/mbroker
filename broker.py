@@ -17,8 +17,9 @@ async def asyncNetstat(scan, verbose):
     executor = ProcessPoolExecutor()
 
     await asyncio.gather(*[
+        asyncio.create_task(WebServer.run()),
+
         asyncio.create_task(Multicast.cast(scan, verbose)),
-        WebServer.run(),
     ])
 
 

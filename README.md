@@ -25,3 +25,10 @@ Commands:
   push     Pushes code out.
   reboot   Reboots device.
   remove   Remove Mariachi devices.
+
+To test with a mock device, run, in two separate term windows:
+./python3 device_mock.py
+
+and
+
+mbroker netstat --scan

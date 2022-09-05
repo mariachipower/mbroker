@@ -30,7 +30,7 @@ class Multicast:
         sock.sendto(data.encode('utf-8'), (MCAST_GRP, MCAST_PORT))
         if self.verbose:
             print(
-                f"Multicasting local IP {my_ip}:5000 for devices to connect via socket.io")
+                f"[UDP] Multicasting local IP {my_ip}:5000 for devices to connect via socket.io")
 
     @classmethod
     async def cast(cls, scan, verbose):
@@ -42,7 +42,7 @@ class Multicast:
             res = await loop.run_in_executor(None, self.send)
             await asyncio.sleep(1)
             retries += 1
-            dots = "." * retries
-            print(dots, end="\r")
+            print(
+                f"[UDP] multicast #{retries}")
 
-        click.echo('END              ')
+        click.echo('[UDP] END              ')

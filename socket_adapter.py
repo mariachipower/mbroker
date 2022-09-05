@@ -1,20 +1,29 @@
 from aiohttp import web
+import socketio
+import eventlet
 import asyncio
-from contextvars import ContextVar
+from threading import Thread
 from socket import gethostbyname, gethostname
-import click
 
-app = web.Application()
-
-runner = web.AppRunner(app)
-VAR = ContextVar('VAR', default='default')
 my_ip = gethostbyname(gethostname())
 my_port = 5000
+sio = socketio.Server()
+app = socketio.WSGIApp(sio)
 
 
-async def handler(request):
-    click.echo(f"In handler!")
-    return web.Response(text='TEST')
+@sio.event
+def connect(sid, environ):
+    print('[SOCKET] connect ', sid)
+
+
+@sio.event
+def my_message(sid, data):
+    print('[SOCKET] message ', data)
+
+
+@sio.event
+def disconnect(sid):
+    print('[SOCKET] disconnect ', sid)
 
 
 class WebServer():
@@ -23,16 +32,10 @@ class WebServer():
         super()
 
     @staticmethod
+    def listen():
+        eventlet.wsgi.server(eventlet.listen((my_ip, my_port)), app)
+
+    @staticmethod
     async def run():
-
-        await runner.setup()
-        click.echo(f"Opening TCPSite on {my_ip}:{my_port}")
-        site = web.TCPSite(runner, my_ip, my_port)
-        await site.start()
-
-        while True:
-            await asyncio.sleep(3600)  # sleep forever
-
-
-app.router.add_get('/', handler)
-app.router.add_get('', handler)
+        loop = asyncio.get_event_loop()
+        res = await loop.run_in_executor(None, WebServer.listen)

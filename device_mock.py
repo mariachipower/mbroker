@@ -32,15 +32,15 @@ async def multicastListener():
         loop = asyncio.get_event_loop()
         res = await loop.run_in_executor(None, sock.recv, 1000)
         dec = loads(res.decode('utf-8'))
-        # print(dec['my_ip'])
         if dec and dec['my_ip']:
+            print(f'[UDP] multicast package received!')
             try:
-                # await socketIoConnect(dec['my_ip'])
                 ip = dec['my_ip']
-                conn = f'http://{ip}:{port}/'
-                # print(f'Connecting to: {conn}')
+                conn = f'http://{ip}:{port}'
+                print(f'[SOCKET] Connecting to: {conn}')
 
                 await sio.connect(conn)
+                await sio.emit('sub.symbol', {'symbol': 'VDS_USDT'})
                 await sio.wait()
             except:
                 print('could not conect')
@@ -51,14 +51,16 @@ async def multicastListener():
 #
 ##############################################################################
 port = 5000
-sio = socketio.AsyncClient()
+sio = socketio.AsyncClient(
+    # logger=True, engineio_logger=True
+)
 
 
 @ sio.event
 async def connect():
-    print('connection established')
+    print('[SOCKET] connection established')
     await sio.emit('message', data='detection', callback=done)
-    print('message sent')
+    print('[SOCKET] message sent')
 
 
 async def done():
@@ -67,13 +69,13 @@ async def done():
 
 @ sio.event
 async def my_message(data):
-    print('message received with ', data)
+    print('[SOCKET] message received with ', data)
     await sio.emit('my response', {'response': 'my response'})
 
 
 @ sio.event
 async def disconnect():
-    print('disconnected from server')
+    print('[SOCKET] disconnected from server')
 
 
 async def socketIoConnect(ip):
