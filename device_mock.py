@@ -32,16 +32,16 @@ async def multicastListener():
         loop = asyncio.get_event_loop()
         res = await loop.run_in_executor(None, sock.recv, 1000)
         dec = loads(res.decode('utf-8'))
-        if dec and dec['my_ip']:
+        if dec and dec['mariachi_broker_ip']:
             print(f'[UDP] multicast package received!')
             try:
-                ip = dec['my_ip']
+                ip = dec['mariachi_broker_ip']
                 conn = f'http://{ip}:{port}'
                 print(f'[SOCKET] Connecting to: {conn}')
 
                 if not sioSocket.connected:
                     await sioSocket.connect(conn)
-                await sioSocket.emit('my_message', {'mac': sys.argv[1]})
+                await sioSocket.emit('msg_mariachi_ready', {'mac': sys.argv[1]})
                 # await sioSocket.wait()
 
             except:
@@ -73,7 +73,7 @@ async def done():
 
 
 @ sioUdp.event
-async def my_message(data):
+async def msg_update_sources(data):
     print('[SOCKET] message received with ', data)
     await sioUdp.emit('my response', {'response': 'my response'})
 

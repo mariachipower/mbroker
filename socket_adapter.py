@@ -5,8 +5,8 @@ import asyncio
 from threading import Thread
 from socket import gethostbyname, gethostname
 
-my_ip = gethostbyname(gethostname())
-my_port = 5000
+host_ip = gethostbyname(gethostname())
+host_port = 5000
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
 
@@ -17,7 +17,7 @@ def connect(sid, environ):
 
 
 @sio.event
-def my_message(sid, data):
+def msg_mariachi_ready(sid, data):
     print('[SOCKET] Message ', data)
 
 
@@ -33,7 +33,7 @@ class WebServer():
 
     @staticmethod
     def listen():
-        eventlet.wsgi.server(eventlet.listen((my_ip, my_port)), app)
+        eventlet.wsgi.server(eventlet.listen((host_ip, host_port)), app)
 
     @staticmethod
     async def run():

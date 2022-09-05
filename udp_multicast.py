@@ -15,7 +15,7 @@ MULTICAST_TTL = 2
 sock = socket.socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
 sock.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, MULTICAST_TTL)
 # get our IP. Be careful if you have multiple network interfaces or IPs
-my_ip = gethostbyname(gethostname())
+host_ip = gethostbyname(gethostname())
 RETRY_LIMIT = 10
 
 
@@ -25,12 +25,12 @@ class Multicast:
         pass
 
     def send(self):
-        message = {'my_ip': my_ip}
+        message = {'mariachi_broker_ip': host_ip}
         data = dumps(message)
         sock.sendto(data.encode('utf-8'), (MCAST_GRP, MCAST_PORT))
         if self.verbose:
             print(
-                f"[UDP] Multicasting local IP {my_ip}:5000 for devices to connect via socket.io")
+                f"[UDP] Multicasting local IP {host_ip}:5000 for devices to connect via socket.io")
 
     @classmethod
     async def cast(cls, scan, verbose):
