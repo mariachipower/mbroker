@@ -1,12 +1,8 @@
-import math
 from pickle import FALSE
-import random
-import time
 import click
-import configparser
+from config import Config
 import os
 import asyncio
-import socketio
 from udp_multicast import Multicast
 from socket_adapter import WebServer
 from concurrent.futures import ProcessPoolExecutor
@@ -21,33 +17,6 @@ async def asyncNetstat(scan, verbose):
 
         asyncio.create_task(Multicast.cast(scan, verbose)),
     ])
-
-
-class Config:
-    """The config in this example only holds devices."""
-
-    def __init__(self):
-        self.path = os.getcwd()
-        self.devices = {}
-
-    def add_device(self, device, cmd):
-        self.devices.update({device: cmd})
-
-    def read_config(self):
-        parser = configparser.RawConfigParser()
-        parser.read(["config.ini"])
-        try:
-            self.devices.update(parser.items("devices"))
-        except configparser.NoSectionError:
-            pass
-
-    def write_config(self):
-        parser = configparser.RawConfigParser()
-        parser.add_section("devices")
-        for key, value in self.devices.items():
-            parser.set("devices", key, value)
-        with open("config.ini", "wb") as file:
-            parser.write(file)
 
 
 pass_config = click.make_pass_decorator(Config, ensure=True)

@@ -15,7 +15,8 @@ MULTICAST_TTL = 2
 sock = socket.socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
 sock.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, MULTICAST_TTL)
 # get our IP. Be careful if you have multiple network interfaces or IPs
-host_ip = gethostbyname(gethostname())
+hostname = gethostname()
+host_ip = gethostbyname(hostname)
 RETRY_LIMIT = 10
 
 

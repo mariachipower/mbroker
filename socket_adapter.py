@@ -1,9 +1,9 @@
-from aiohttp import web
 import socketio
 import eventlet
 import asyncio
-from threading import Thread
 from socket import gethostbyname, gethostname
+from config import Config
+import click
 
 host_ip = gethostbyname(gethostname())
 host_port = 5000
@@ -18,6 +18,10 @@ def connect(sid, environ):
 
 @sio.event
 def msg_mariachi_ready(sid, data):
+    config = Config()
+    config.read_config()
+    config.add_device(data["mac"])
+    config.write_config()
     print('[SOCKET] Message ', data)
 
 
