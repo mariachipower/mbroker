@@ -41,10 +41,10 @@ async def multicastListener():
 
                 if not sioSocket.connected:
                     await sioSocket.connect(conn)
-                await sioSocket.emit('msg_mariachi_ready', {'mac': sys.argv[1]})
+                await sioSocket.emit('msg_mariachi_ready', {'mac': 'my_mac_123'})
                 # await sioSocket.wait()
-
-            except:
+            except Exception as e:
+                print(e)
                 print('could not conect')
 
 ##############################################################################

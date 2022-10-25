@@ -14,7 +14,6 @@ async def asyncNetstat(scan, verbose):
 
     await asyncio.gather(*[
         asyncio.create_task(WebServer.run()),
-
         asyncio.create_task(Multicast.cast(scan, verbose)),
     ])
 

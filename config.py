@@ -1,5 +1,6 @@
 import configparser
 import os
+import json
 from datetime import datetime
 
 
@@ -14,18 +15,24 @@ class Config:
         self.devices = {}
 
     def add_device(self, mac):
+        print('>>> add_device')
         s_mac = str(mac)
         print(self.devices)
         ts = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         if s_mac in self.devices:
-            self.devices[s_mac]["last_seen"] = ts
+            device_obj = json.loads(self.devices[s_mac].replace("'", '"'))
+            print('     >>> device_obj:')
+            print(device_obj)
+            device_obj["last_seen"] = ts
         else:
+            print('     >>> 2')
             self.devices[s_mac] = {
                 "last_seen": ts
             }
 
     def read_config(self):
+        print('>>> read_config')
         parser = configparser.RawConfigParser()
         parser.read([config_name])
         try:
@@ -34,6 +41,7 @@ class Config:
             pass
 
     def write_config(self):
+        print('>>> write_config')
         parser = configparser.RawConfigParser()
         parser.add_section("devices")
         for key, value in self.devices.items():
